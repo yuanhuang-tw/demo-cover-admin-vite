@@ -1,0 +1,47 @@
+.highlight {
+  position: relative;
+}
+
+.highlight span {
+  background-color: khaki;
+  font-weight: bold;
+}
+
+.highlight .edit-icon {
+  position: absolute;
+  right: 1rem;
+}
+.highlight .edit-icon::after {
+  display: inline-block;
+  content: '\f040';
+  font-family: FontAwesome;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+.highlight:hover .edit-icon::after {
+  opacity: 1;
+}
+
+#chart {
+  width: 96%;
+}
+
+.img-msg,
+.audio-msg,
+.cancel-msg,
+.update-msg {
+  position: fixed;
+  left: -25%;
+  bottom: 1rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.8s ease-in-out;
+}
+
+.img-msg.active,
+.audio-msg.active,
+.cancel-msg.active,
+.update-msg.active {
+  left: 1%;
+  opacity: 1;
+}
