@@ -1,21 +1,21 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch } from 'vue'
 
-const props = defineProps(['modelValue']);
-const emit = defineEmits(['update:modelValue']);
+const props = defineProps(['modelValue'])
+const emit = defineEmits(['update:modelValue'])
 
-const searchString = ref(props.modelValue);
+const searchString = ref(props.modelValue)
 
 const changeSearchString = (e) => {
-  emit('update:modelValue', e.target.value.trim());
-};
+  emit('update:modelValue', e.target.value.trim())
+}
 
 watch(
   () => props.modelValue,
   (newValue) => {
-    searchString.value = newValue;
+    searchString.value = newValue
   }
-);
+)
 </script>
 
 <template>
@@ -23,6 +23,7 @@ watch(
     <input
       type="text"
       class="form-control"
+      id="search"
       placeholder="搜尋暱稱"
       v-model="searchString"
       @input="changeSearchString"

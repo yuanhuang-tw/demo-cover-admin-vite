@@ -1,99 +1,99 @@
 <script setup>
-import { ref, nextTick } from 'vue';
+import { ref, nextTick } from 'vue'
 
-defineProps(['data', 'regexp']);
-const emit = defineEmits(['uploadOkBtn', 'cancelBtn', 'changeNickname']);
+defineProps(['data', 'regexp'])
+const emit = defineEmits(['uploadOkBtn', 'cancelBtn', 'changeNickname'])
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL
 
 // 點選 照片/音檔 按鈕
 const uploadOkBtn = (item, type) => {
-  emit('uploadOkBtn', item, type);
-};
+  emit('uploadOkBtn', item, type)
+}
 
 // 點選 取消 按鈕
 const cancelBtn = (item) => {
-  emit('cancelBtn', item);
-};
+  emit('cancelBtn', item)
+}
 
 // 顯示詳細資料
-const detailData = ref('');
+const detailData = ref('')
 
 const showDetail = (user) => {
   fetch(`${API_URL}/detail-db.php?u=${user}`)
     .then((res) => res.json())
     .then((data) => (detailData.value = data[0]))
-    .catch((err) => console.log(err));
-};
+    .catch((err) => console.log(err))
+}
 
 // 雙擊 暱稱欄位
-const showNicknameField = ref(true);
-const showInputNo = ref('');
-let tempNickname;
-let changeNicknameStatus = false;
+const showNicknameField = ref(true)
+const showInputNo = ref('')
+let tempNickname
+let changeNicknameStatus = false
 
 const nicknameDoubleClick = (item) => {
   // 報名取消 不能 雙擊 暱稱欄位
   if (item.cancel_sign_up === 'y') {
-    return;
+    return
   }
 
-  showNicknameField.value = false;
-  showInputNo.value = item.no;
-  tempNickname = item.nickname;
-  changeNicknameStatus = false;
+  showNicknameField.value = false
+  showInputNo.value = item.no
+  tempNickname = item.nickname
+  changeNicknameStatus = false
 
   nextTick(() => {
-    const input = document.querySelector(`#input-${item.no}`);
+    const input = document.querySelector(`#input-${item.no}`)
 
-    input.focus();
+    input.focus()
 
     input.addEventListener('blur', () => {
       // 按 enter 成功修改後 不會執行這個 if
       if (!changeNicknameStatus) {
-        esc(item);
+        esc(item)
       }
-    });
-  });
-};
+    })
+  })
+}
 
 // 按 enter 修改
 const changeNickname = (item) => {
-  const re = new RegExp(/["^{}()|[\]\\]/, 'i');
+  const re = new RegExp(/["^{}()|[\]\\]/, 'i')
 
   // 暱稱 不能為空值 / 不能有特殊字元 / 修改前後不能相同
   if (!item.nickname.trim().length || re.test(item.nickname) || tempNickname === item.nickname) {
     if (item.nickname.trim().length < 1) {
-      alert('請輸入暱稱');
+      alert('請輸入暱稱')
     }
 
     if (re.test(item.nickname)) {
-      alert('暱稱請勿使用特殊字元');
+      alert('暱稱請勿使用特殊字元')
     }
 
     if (tempNickname === item.nickname) {
-      alert('暱稱修改前後不能相同');
+      alert('暱稱修改前後不能相同')
     }
   } else {
-    changeNicknameStatus = true;
-    showNicknameField.value = true;
+    changeNicknameStatus = true
+    showNicknameField.value = true
 
-    emit('changeNickname', item);
+    emit('changeNickname', item)
   }
-};
+}
 
 // 按 esc 放棄修改
 const esc = (item) => {
-  item.nickname = tempNickname;
-  showNicknameField.value = true;
-};
+  item.nickname = tempNickname
+  showNicknameField.value = true
+}
 </script>
 
 <template>
   <table class="table table-bordered table-hover">
     <thead>
       <tr class="text-center">
-        <th>ID <i class="fa fa-caret-down" aria-hidden="true"></i></th>
+        <th width="50">ID <i class="fa fa-caret-down" aria-hidden="true"></i></th>
         <th>姓名</th>
         <th>暱稱</th>
         <th>組別</th>
@@ -113,10 +113,10 @@ const esc = (item) => {
         :key="item.no"
         :class="{ 'text-muted': item.cancel_sign_up === 'y' }"
       >
-        <td>
+        <td class="position-relative">
           <a
             href=""
-            class="text-decoration-none d-block"
+            class="block-link text-decoration-none position-absolute p-2"
             data-bs-toggle="modal"
             data-bs-target="#detailModal"
             @click="showDetail(item.no)"
@@ -135,10 +135,10 @@ const esc = (item) => {
             v-html="
               item.nickname.replace(regexp, (match) => {
                 if (match !== '') {
-                  return `<span>${match}</span>`;
+                  return `<span>${match}</span>`
                 }
 
-                return match;
+                return match
               })
             "
           ></div>
